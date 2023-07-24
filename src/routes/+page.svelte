@@ -96,47 +96,26 @@
     }
   });
   </script>
-  
-  <style>
-    video {
-      width: 100%;
-      max-width: 640px;
-      height: auto;
-      border: 1px solid #ccc;
-      position: absolute;
-      z-index: 1;
-    }
-  
-    canvas {
-      position: absolute;
-      z-index: 2;
-      top: 0;
-      left: 0;
-    }
-  </style>
-  
+
   <main>
-    <!-- svelte-ignore a11y-media-has-caption -->
-    <video bind:this={video}></video>
-    <canvas
-      bind:this={canvas}
-      width="640"
-      height="480"
-      style="width: 100%; height: auto;"
-    ></canvas>
-    <div>
-      {#if $predictionsStore.length > 0}
-        <h2>Detected Objects:</h2>
-        <ul>
-          {#each $predictionsStore as prediction, index}
-            <li>
-              {prediction.class} - Confidence: {prediction.score.toFixed(2)}
-            </li>
-          {/each}
-        </ul>
-      {:else}
-        <p>No objects detected.</p>
-      {/if}
+    <div class='flex flex-col justify-center items-center w-screen h-screen bg-gray-900'>
+      <p
+        class="font-extrabold text-transparent text-8xl bg-clip-text bg-gradient-to-r from-purple-500 to-pink-600 p-10"
+      >Detecção de objetos</p>
+      <p class='text-indigo-200 font-medium text-lg'>Neste projeto, foi utilizado o modelo COCO-SSD (Common Objects in Context - Single Shot MultiBox Detector) do Tensorflow para detecção de objetos em tempo real a partir da sua webcam.</p>
+      <div class='relative w-[640px] h-[480px]'>
+      <!-- svelte-ignore a11y-media-has-caption -->
+        <video 
+          bind:this={video}
+          class='absolute z-0 w-full max-w-[640px] h-auto border border-gray-200 rounded-lg'
+        ></video>
+        <canvas
+          bind:this={canvas}
+          width="640"
+          height="480"
+          class='absolute z-10 top-0 left-0'
+        ></canvas>
+      </div>
     </div>
   </main>
   
