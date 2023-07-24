@@ -97,25 +97,52 @@
   });
   </script>
 
-  <main>
-    <div class='flex flex-col justify-center items-center w-screen h-screen bg-gray-900'>
-      <p
-        class="font-extrabold text-transparent text-8xl bg-clip-text bg-gradient-to-r from-purple-500 to-pink-600 p-10"
-      >Detecção de objetos</p>
-      <p class='text-indigo-200 font-medium text-lg'>Neste projeto, foi utilizado o modelo COCO-SSD (Common Objects in Context - Single Shot MultiBox Detector) do Tensorflow para detecção de objetos em tempo real a partir da sua webcam.</p>
-      <div class='relative w-[640px] h-[480px]'>
-      <!-- svelte-ignore a11y-media-has-caption -->
-        <video 
-          bind:this={video}
-          class='absolute z-0 w-full max-w-[640px] h-auto border border-gray-200 rounded-lg'
-        ></video>
-        <canvas
-          bind:this={canvas}
-          width="640"
-          height="480"
-          class='absolute z-10 top-0 left-0'
-        ></canvas>
-      </div>
+  <main class='flex justify-center text-gray-800'>
+
+    <nav class='fixed flex justify-center border-b h-16 w-full'>
+        <div class='container flex justify-between items-center h-full'>
+            <p class='flex items-center font-extrabold text-2xl'><span class='text-xl'>♟</span>&nbspDanilo</p>
+            <div>
+                <div class='flex gap-8 text-lg font-semibold'>
+                    <a class=''>Análises</a>
+                    <a class=''>Sistemas</a>
+                    <a class=''>Websites</a>
+                    <a class=''>Modelos</a>
+                    <a class=''>Blog</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class='w-full h-screen mt-16'>
+        <div class='flex justify-center items-end h-48 bg-gradient-to-b from-white to-gray-100'>
+            <div class='container text-gray-400'>
+                <div class='flex gap-2 text-2xl'>
+                    <div class='flex gap-2 items-center'>
+                        <p class='font-semibold'>Machine Learning</p>
+                    </div>
+                    <p>/</p>
+                    <div class='flex gap-2 items-center'>
+                        <p class='font-semibold text-gray-700'>Object detection with COCO-SSD</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div class='relative container w-[640px] h-[480px]'>
+            <!-- svelte-ignore a11y-media-has-caption -->
+            <video 
+                bind:this={video}
+                class='absolute w-full max-w-[640px] h-auto border border-gray-200 rounded-lg'
+            ></video>
+            <canvas
+                bind:this={canvas}
+                width="640"
+                height="480"
+                class='absolute top-0 left-0'
+            ></canvas>
+        </div>
     </div>
   </main>
   
