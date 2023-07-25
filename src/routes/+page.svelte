@@ -1,8 +1,22 @@
 <script lang="ts">
+  import TechButton from './TechButton.svelte';
+  import BreadCrumb from './BreadCrumb.svelte';
+  import CopyButton from './CopyButton.svelte';
   import { onMount, onDestroy } from "svelte";
   import { writable } from "svelte/store";
   import * as tf from "@tensorflow/tfjs";
   import * as cocoSsd from "@tensorflow-models/coco-ssd";
+  import Tabs from './Tabs.svelte';
+  import Tab from './Tab.svelte';
+  import Panels from './Panels.svelte';
+
+  const tabs = [
+    { label: 'Tab 1', icon: 'path/to/tab1-icon.svg' },
+    { label: 'Tab 2', icon: 'path/to/tab2-icon.svg' },
+    { label: 'Tab 3', icon: 'path/to/tab3-icon.svg' },
+  ];
+
+  let activeTab = 0;
 
   const predictionsStore = writable<cocoSsd.DetectedObject[]>([]);
   
@@ -101,7 +115,7 @@
 
     <nav class='fixed flex justify-center border-b h-16 w-full'>
         <div class='container flex justify-between items-center h-full'>
-            <p class='flex items-center font-extrabold text-2xl'><span class='text-xl'>♟</span>&nbspDanilo</p>
+            <p class='flex items-center font-bold text-2xl'>Danilo</p>
             <div>
                 <div class='flex gap-8 text-lg font-semibold'>
                     <a class=''>Análises</a>
@@ -118,19 +132,32 @@
         <div class='flex justify-center items-end h-48 bg-gradient-to-b from-white to-gray-100'>
             <div class='container text-gray-400'>
                 <div class='flex gap-2 text-2xl'>
-                    <div class='flex gap-2 items-center'>
-                        <p class='font-semibold'>Machine Learning</p>
-                    </div>
-                    <p>/</p>
-                    <div class='flex gap-2 items-center'>
-                        <p class='font-semibold text-gray-700'>Object detection with COCO-SSD</p>
-                    </div>
+                  <div class='flex'>
+                    <BreadCrumb items={["Machine Learning", "Object detection with COCO-SSD"]} />
+                    <CopyButton />
+                  </div>
+                    <TechButton techName={'TypeScript'} logoSrc={'vscode-icons-file-type-typescript-official.svg'} />
+                    <TechButton techName={'Svelte'} logoSrc={'vscode-icons-file-type-svelte.svg'} />
+                    <TechButton techName={'Tailwind'} logoSrc={'devicon-tailwindcss.svg'} />
+                    <TechButton techName={'Tensorflow'} logoSrc={'devicon-tensorflow.svg'} />
+                    <TechButton techName={'Python'} logoSrc={'vscode-icons-file-type-python.svg'} />
 
                 </div>
+                  <Tabs {activeTab}>
+                    {#each tabs as tab, index}
+                      <Tab
+                        label={tab.label}
+                        icon={tab.icon}
+                        active={activeTab === index}
+                        on:click={() => (activeTab = index)}
+                      />
+                    {/each}
+                  </Tabs>
             </div>
 
         </div>
         <div class='relative container w-[640px] h-[480px]'>
+            <Panels {activeTab} />
             <!-- svelte-ignore a11y-media-has-caption -->
             <video 
                 bind:this={video}
