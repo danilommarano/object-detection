@@ -1,6 +1,7 @@
 <!-- Panels.svelte -->
 <script lang="ts">
   export let activeTab = 0;
+  console.log(activeTab)
 </script>
 
 <div>

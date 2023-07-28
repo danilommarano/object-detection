@@ -1,22 +1,24 @@
 <script lang="ts">
-  import TechButton from './TechButton.svelte';
-  import BreadCrumb from './BreadCrumb.svelte';
-  import CopyButton from './CopyButton.svelte';
+  import TechButton from '../components/TechButton.svelte';
+  import BreadCrumb from '../components/BreadCrumb.svelte';
+  import CopyButton from '../components/CopyButton.svelte';
   import { onMount, onDestroy } from "svelte";
   import { writable } from "svelte/store";
   import * as tf from "@tensorflow/tfjs";
   import * as cocoSsd from "@tensorflow-models/coco-ssd";
-  import Tabs from './Tabs.svelte';
-  import Tab from './Tab.svelte';
-  import Panels from './Panels.svelte';
-
+  import Tabs from '../components/Tabs.svelte';
+  import Tab from '../components/Tab.svelte';
+  import Panels from '../components/Panels.svelte';
+  import Navbar from '../components/Navbar.svelte';
+  import Logo from '../components/Logo.svelte';
+  import BadgesList from '../components/BadgesList.svelte';
+  
   const tabs = [
-    { label: 'Tab 1', icon: 'path/to/tab1-icon.svg' },
-    { label: 'Tab 2', icon: 'path/to/tab2-icon.svg' },
-    { label: 'Tab 3', icon: 'path/to/tab3-icon.svg' },
+    { label: 'Modelo', emoji: '📦' },
+    { label: 'Artigo', emoji: '📄' },
   ];
 
-  let activeTab = 0;
+  let activePanel:string = tabs[0]['label'];
 
   const predictionsStore = writable<cocoSsd.DetectedObject[]>([]);
   
@@ -55,6 +57,10 @@
       } catch (err) {
         console.error("Error detecting objects:", err);
       }
+    }
+
+    function handleTabClick(tab_label:string) {
+      activePanel = tab_label;
     }
   
     function drawBoundingBoxes(predictions: cocoSsd.DetectedObject[]) {
@@ -112,63 +118,76 @@
   </script>
 
   <main class='flex justify-center text-gray-800'>
-
-    <nav class='fixed flex justify-center border-b h-16 w-full'>
-        <div class='container flex justify-between items-center h-full'>
-            <p class='flex items-center font-bold text-2xl'>Danilo</p>
-            <div>
-                <div class='flex gap-8 text-lg font-semibold'>
-                    <a class=''>Análises</a>
-                    <a class=''>Sistemas</a>
-                    <a class=''>Websites</a>
-                    <a class=''>Modelos</a>
-                    <a class=''>Blog</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-
+    <Navbar>
+      <Logo/>
+      <div>
+          <div class='flex gap-8 text-lg font-semibold'>
+              <a class=''>Análises</a>
+              <a class=''>Sistemas</a>
+              <a class=''>Websites</a>
+              <a class=''>Modelos</a>
+              <a class=''>Blog</a>
+          </div>
+      </div>
+    </Navbar>
     <div class='w-full h-screen mt-16'>
-        <div class='flex justify-center items-end h-48 bg-gradient-to-b from-white to-gray-100'>
-            <div class='container text-gray-400'>
-                <div class='flex gap-2 text-2xl'>
-                  <div class='flex'>
-                    <BreadCrumb items={["Machine Learning", "Object detection with COCO-SSD"]} />
-                    <CopyButton />
+        <div class='flex justify-center items-end h-48 bg-gradient-to-b from-white to-gray-50'>
+            <div class='flex flex-col gap-6 container text-gray-400'>
+                <div class='flex flex-col gap-2 text-2xl'>
+                  <div class='flex items-center'>
+                    <BreadCrumb items={["Aprendizado de Máquina", "Detecção de Objetos com COCO-SSD"]} />
                   </div>
+                  <BadgesList>
                     <TechButton techName={'TypeScript'} logoSrc={'vscode-icons-file-type-typescript-official.svg'} />
                     <TechButton techName={'Svelte'} logoSrc={'vscode-icons-file-type-svelte.svg'} />
                     <TechButton techName={'Tailwind'} logoSrc={'devicon-tailwindcss.svg'} />
                     <TechButton techName={'Tensorflow'} logoSrc={'devicon-tensorflow.svg'} />
                     <TechButton techName={'Python'} logoSrc={'vscode-icons-file-type-python.svg'} />
-
+                  </BadgesList>
                 </div>
-                  <Tabs {activeTab}>
-                    {#each tabs as tab, index}
-                      <Tab
-                        label={tab.label}
-                        icon={tab.icon}
-                        active={activeTab === index}
-                        on:click={() => (activeTab = index)}
-                      />
+                  <Tabs>
+                    {#each tabs as tab}
+                      <Tab on:click={() => handleTabClick(tab.label)}>
+                        <p>{tab.emoji}</p>
+                        <p>{tab.label}</p>
+                      </Tab>
                     {/each}
                   </Tabs>
             </div>
-
         </div>
-        <div class='relative container w-[640px] h-[480px]'>
-            <Panels {activeTab} />
-            <!-- svelte-ignore a11y-media-has-caption -->
-            <video 
-                bind:this={video}
-                class='absolute w-full max-w-[640px] h-auto border border-gray-200 rounded-lg'
-            ></video>
-            <canvas
-                bind:this={canvas}
-                width="640"
-                height="480"
-                class='absolute top-0 left-0'
-            ></canvas>
+
+        <div class='flex justify-center'>
+            <div class='relative container w-full'>
+              {#if activePanel === tabs[0]['label']}
+                <!-- svelte-ignore a11y-media-has-caption -->
+                <video 
+                    bind:this={video}
+                    class='absolute w-full max-w-[640px] h-auto border border-gray-200 rounded-lg'
+                ></video>
+                <canvas
+                    bind:this={canvas}
+                    width="640"
+                    height="480"
+                    class='absolute top-0 left-0'
+                ></canvas>
+              {/if}
+
+
+              {#if activePanel === tabs[1]['label']}
+              teste
+                <!-- svelte-ignore a11y-media-has-caption -->
+                <video 
+                    bind:this={video}
+                    class='absolute w-full max-w-[640px] h-auto border border-gray-200 rounded-lg'
+                ></video>
+                <canvas
+                    bind:this={canvas}
+                    width="640"
+                    height="480"
+                    class='absolute top-0 left-0'
+                ></canvas>
+              {/if}
+            </div>
         </div>
     </div>
   </main>

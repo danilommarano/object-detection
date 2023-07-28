@@ -14,5 +14,5 @@
 </script>
 
 <button class="flex items-center space-x-1 px-4 py-2 font-semibold cursor-pointer" on:click={() => copyUrl()}>
-  <img class="w-6 h-6 text-gray-400" src="/material-symbols-content-copy-outline-rounded.svg" alt="Copy Icon" />
+  <img class="w-5 h-5 text-gray-400" src="/material-symbols-content-copy-outline-rounded.svg" alt="Copy Icon" />
 </button>
