@@ -12,6 +12,7 @@
   import Navbar from '../components/Navbar.svelte';
   import Logo from '../components/Logo.svelte';
   import BadgesList from '../components/BadgesList.svelte';
+    import ObjectDetectionCamera from '../components/ObjectDetectionCamera.svelte';
   
   const tabs = [
     { label: 'Modelo', emoji: '📦' },
@@ -132,10 +133,11 @@
     </Navbar>
     <div class='w-full h-screen mt-16'>
         <div class='flex justify-center items-end h-48 bg-gradient-to-b from-white to-gray-50'>
-            <div class='flex flex-col gap-6 container text-gray-400'>
-                <div class='flex flex-col gap-2 text-2xl'>
-                  <div class='flex items-center'>
-                    <BreadCrumb items={["Aprendizado de Máquina", "Detecção de Objetos com COCO-SSD"]} />
+          <div class='flex flex-col gap-6 container text-gray-500'>
+              <div class='flex flex-col gap-3'>
+                <div class='flex flex-col'>
+                  <BreadCrumb items={["Computação", "Inteligência Artificial"]} />
+                  <h1 class='font-bold text-4xl text-gray-600'>Detecção de objetos usando o COCO-SSD</h1>
                   </div>
                   <BadgesList>
                     <TechButton techName={'TypeScript'} logoSrc={'vscode-icons-file-type-typescript-official.svg'} />
