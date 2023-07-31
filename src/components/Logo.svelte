@@ -1,1 +1,1 @@
-<p class='flex items-center font-bold text-2xl'>Danilo</p>
+<p class='flex items-center font-bold text-2xl text-gray-700'>☘️ Danilo</p>
