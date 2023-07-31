@@ -1,16 +1,10 @@
 <script lang="ts">
   import TechButton from '../components/TechButton.svelte';
   import BreadCrumb from '../components/BreadCrumb.svelte';
-  import CopyButton from '../components/CopyButton.svelte';
-  import { onMount, onDestroy } from "svelte";
-  import { writable } from "svelte/store";
-  import * as tf from "@tensorflow/tfjs";
-  import * as cocoSsd from "@tensorflow-models/coco-ssd";
+  import Logo from '../components/Logo.svelte';
   import Tabs from '../components/Tabs.svelte';
   import Tab from '../components/Tab.svelte';
-  import Panels from '../components/Panels.svelte';
   import Navbar from '../components/Navbar.svelte';
-  import Logo from '../components/Logo.svelte';
   import BadgesList from '../components/BadgesList.svelte';
     import ObjectDetectionCamera from '../components/ObjectDetectionCamera.svelte';
   
@@ -21,101 +15,9 @@
 
   let activePanel:string = tabs[0]['label'];
 
-  const predictionsStore = writable<cocoSsd.DetectedObject[]>([]);
-  
-    let video: HTMLVideoElement;
-    let canvas: HTMLCanvasElement;
-    let model: cocoSsd.ObjectDetection;
-    let detecting = false;
-  
-    const colors: string[] = [
-      "#FF0000",
-      "#00FF00",
-      "#0000FF",
-      "#FFFF00",
-      "#00FFFF",
-      "#FF00FF",
-    ];
-  
-    async function loadModel() {
-      model = await cocoSsd.load();
-    }
-  
-    async function detectObjects() {
-      if (detecting) return;
-      detecting = true;
-  
-      try {
-        while (detecting) {
-          if (video.readyState === video.HAVE_ENOUGH_DATA) {
-            const newPredictions = await model.detect(video);
-            predictionsStore.set(newPredictions);
-  
-            drawBoundingBoxes(newPredictions);
-          }
-          await new Promise((resolve) => requestAnimationFrame(resolve));
-        }
-      } catch (err) {
-        console.error("Error detecting objects:", err);
-      }
-    }
-
     function handleTabClick(tab_label:string) {
       activePanel = tab_label;
     }
-  
-    function drawBoundingBoxes(predictions: cocoSsd.DetectedObject[]) {
-      const ctx = canvas.getContext("2d");
-      if (ctx !== null) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        predictions.forEach((prediction, index) => {
-          const color = colors[index % colors.length];
-          ctx.strokeStyle = color;
-          ctx.lineWidth = 2;
-          ctx.fillStyle = color;
-          ctx.font = "16px Arial";
-
-          ctx.beginPath();
-          ctx.rect(
-            prediction.bbox[0],
-            prediction.bbox[1],
-            prediction.bbox[2],
-            prediction.bbox[3]
-          );
-          ctx.stroke();
-
-          ctx.fillText(
-            `${prediction.class} - ${prediction.score.toFixed(2)}`,
-            prediction.bbox[0],
-            prediction.bbox[1] > 10 ? prediction.bbox[1] - 5 : 10
-          );
-        });
-      }
-
-    }
-  
-    onMount(() => {
-      loadModel();
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then((stream) => {
-          video.srcObject = stream;
-          video.play();
-          detectObjects();
-        })
-        .catch((err) => {
-          console.error("Error accessing the webcam:", err);
-        });
-    });
-  
-    onDestroy(() => {
-    detecting = false;
-    if (video && video.srcObject) {
-      // @ts-ignore
-      const tracks = video.srcObject.getTracks();
-      tracks.forEach((track: { stop: () => any; }) => track.stop());
-    }
-  });
   </script>
 
   <main class='flex justify-center text-gray-800'>
@@ -159,35 +61,14 @@
         </div>
 
         <div class='flex justify-center'>
-            <div class='relative container w-full'>
+          <div class='container w-full pt-4'>
               {#if activePanel === tabs[0]['label']}
-                <!-- svelte-ignore a11y-media-has-caption -->
-                <video 
-                    bind:this={video}
-                    class='absolute w-full max-w-[640px] h-auto border border-gray-200 rounded-lg'
-                ></video>
-                <canvas
-                    bind:this={canvas}
-                    width="640"
-                    height="480"
-                    class='absolute top-0 left-0'
-                ></canvas>
+              <ObjectDetectionCamera />
               {/if}
 
 
               {#if activePanel === tabs[1]['label']}
               teste
-                <!-- svelte-ignore a11y-media-has-caption -->
-                <video 
-                    bind:this={video}
-                    class='absolute w-full max-w-[640px] h-auto border border-gray-200 rounded-lg'
-                ></video>
-                <canvas
-                    bind:this={canvas}
-                    width="640"
-                    height="480"
-                    class='absolute top-0 left-0'
-                ></canvas>
               {/if}
             </div>
         </div>
